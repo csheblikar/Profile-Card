@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -61,8 +63,8 @@ fun MainScreen(userProfiles: List<UserProfile> = userList) {
         Surface(
             modifier = Modifier.padding(innerPadding)
             ) {
-            Column {
-                for(user in userProfiles) {
+            LazyColumn {
+                items(userProfiles) { user ->
                     ProfileCard(user)
                 }
             }
@@ -92,7 +94,8 @@ fun ProfileCard(userProfile: UserProfile) {
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .wrapContentHeight(align = Alignment.Top),
+            .wrapContentHeight(align = Alignment.Top)
+            .alpha(if(userProfile.status) 1f else 0.6f),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Row(

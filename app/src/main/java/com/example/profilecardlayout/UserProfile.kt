@@ -5,4 +5,15 @@ data class UserProfile(val name: String, val status: Boolean, val drawableId: In
 val userList = arrayListOf<UserProfile>(
     UserProfile(name = "John Doe", status = true, drawableId = R.drawable.profile_picture),
     UserProfile(name = "Anna Joe", status = false, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "John Doe", status = true, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "Anna Joe", status = false, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "John Doe", status = true, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "Anna Joe", status = false, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "John Doe", status = true, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "Anna Joe", status = false, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "John Doe", status = true, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "Anna Joe", status = false, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "John Doe", status = true, drawableId = R.drawable.profile_picture),
+    UserProfile(name = "Anna Joe", status = false, drawableId = R.drawable.profile_picture),
+
 )
