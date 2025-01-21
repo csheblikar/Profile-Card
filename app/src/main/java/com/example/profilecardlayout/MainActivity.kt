@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,13 +17,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -40,23 +46,48 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainScreen()
+            ProfileCardLayoutTheme {
+                MainScreen()
+            }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.LightGray
-    ) {
-        ProfileCard()
+fun MainScreen(userProfiles: List<UserProfile> = userList) {
+    Scaffold(topBar = { AppBar() },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier.padding(innerPadding)
+            ) {
+            Column {
+                for(user in userProfiles) {
+                    ProfileCard(user)
+                }
+            }
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileCard() {
+fun AppBar() {
+    TopAppBar(
+        navigationIcon = { Icon(
+            Icons.Default.Home,
+            "",
+            modifier = Modifier.padding(12.dp)
+        ) },
+        title = { Text(
+            text = "Messaging app",
+            modifier = Modifier.padding(12.dp)
+        ) }
+    )
+}
+
+@Composable
+fun ProfileCard(userProfile: UserProfile) {
     Card (
         modifier = Modifier
             .padding(16.dp)
@@ -69,21 +100,21 @@ fun ProfileCard() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture()
-            ProfileContent()
+            ProfilePicture(userProfile.drawableId, userProfile.status)
+            ProfileContent(userProfile.name, userProfile.status)
         }
     }
 }
 
 @Composable
-fun ProfilePicture() {
+fun ProfilePicture(profilePicture: Int, status: Boolean) {
     Card(
         shape = CircleShape,
-        border = BorderStroke(width = 2.dp, color = Color.Green),
+        border = BorderStroke(width = 2.dp, color =  if(status) Color.Green else Color.Red),
         modifier = Modifier.padding(16.dp)
     ) {
         Image(
-            painter = painterResource(R.drawable.profile_picture),
+            painter = painterResource(profilePicture),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(72.dp)
@@ -92,19 +123,19 @@ fun ProfilePicture() {
 }
 
 @Composable
-fun ProfileContent() {
+fun ProfileContent(name: String, status: Boolean) {
     Column(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {
         Text(
-            text = "John Doe",
+            text = name,
             style = MaterialTheme.typography.headlineMedium
         )
 
         Text(
-            text = "Active now",
+            text = if (status) "Online" else "Offline",
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.alpha(0.7f)
         )
@@ -114,5 +145,7 @@ fun ProfileContent() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainScreen()
+    ProfileCardLayoutTheme {
+        MainScreen()
+    }
 }
